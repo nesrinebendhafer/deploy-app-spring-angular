@@ -9,35 +9,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout
+      # 1️ Checkout
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Java
+      # 2️ Setup Java
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 3️⃣ Build Spring Boot (création du .jar)
+      # 3️ Build Spring Boot (création du .jar)
       - name: Build Spring Boot project
         run: |
           cd springboot/app
           mvn clean package -DskipTests
 
-      # 4️⃣ Setup Docker Buildx
+      # 4️ Setup Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 5️⃣ Login DockerHub
+      # 5️ Login DockerHub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 6️⃣ Build & Push Spring Boot image
+      # 6️ Build & Push Spring Boot image
       - name: Build & push Spring Boot image
         uses: docker/build-push-action@v6
         with:
@@ -46,7 +46,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/springboot-app:latest
 
-      # 7️⃣ Build & Push Angular image
+      # 7️ Build & Push Angular image
       - name: Build & push Angular image
         uses: docker/build-push-action@v6
         with:
@@ -55,7 +55,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
 
-      # 8️⃣ Start application
+      # 8️ Start application
       - name: Start application with Docker Compose
         run: docker compose up -d
 
